@@ -1,11 +1,11 @@
 [package]
-name = "gml"
-version = "0.0.1"
+name = "graph-io-gml"
+version = "0.0.2"
 authors = ["Michael Neumann <mneumann@ntecs.de>"]
 license = "MIT"
 repository = "https://github.com/mneumann/gml-rs"
 description = "GML (Graph Modelling Language) loader"
-keywords = ["graph", "io"]
+keywords = ["graph", "io", "gml"]
 
 include = ["src/**/*.rs", "Cargo.toml", "README.md", "LICENSE"]
 
