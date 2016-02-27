@@ -123,6 +123,7 @@ fn sexp_to_graph<NodeWeightFn, EdgeWeightFn, N, E>(sexp: Sexp,
 #[test]
 fn test_parse_gml() {
     let gml = "
+    # comment
     graph
     [
         directed 1
