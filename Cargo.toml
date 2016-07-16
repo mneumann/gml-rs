@@ -1,6 +1,6 @@
 [package]
 name = "graph-io-gml"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Michael Neumann <mneumann@ntecs.de>"]
 license = "MIT"
 repository = "https://github.com/mneumann/gml-rs"
@@ -11,5 +11,5 @@ include = ["src/lib.rs", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
 
-asexp = "0.3.0"
+asexp = "0.3"
 petgraph = "0.2.2"
