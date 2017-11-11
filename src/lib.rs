@@ -8,12 +8,14 @@ use petgraph::graph::NodeIndex;
 use petgraph::{Directed, Graph};
 use std::collections::BTreeMap;
 
-pub fn parse_gml<NodeWeightFn, EdgeWeightFn, N, E>(s: &str,
-                                                   node_weight_fn: &NodeWeightFn,
-                                                   edge_weight_fn: &EdgeWeightFn)
-                                                   -> Result<Graph<N, E, Directed>, &'static str>
-    where NodeWeightFn: Fn(Option<&Sexp>) -> Option<N>,
-          EdgeWeightFn: Fn(Option<&Sexp>) -> Option<E>
+pub fn parse_gml<NodeWeightFn, EdgeWeightFn, N, E>(
+    s: &str,
+    node_weight_fn: &NodeWeightFn,
+    edge_weight_fn: &EdgeWeightFn,
+) -> Result<Graph<N, E, Directed>, &'static str>
+where
+    NodeWeightFn: Fn(Option<&Sexp>) -> Option<N>,
+    EdgeWeightFn: Fn(Option<&Sexp>) -> Option<E>,
 {
     match parse_gml_to_sexp(s) {
         Ok(sexp) => sexp_to_graph(sexp, node_weight_fn, edge_weight_fn),
@@ -23,23 +25,23 @@ pub fn parse_gml<NodeWeightFn, EdgeWeightFn, N, E>(s: &str,
 
 fn parse_gml_to_sexp(s: &str) -> Result<Sexp, ()> {
     let iter = Tokenizer::new(s, true).with_curly_around();
-    let iter = iter.map(|t| {
-        match t {
-            Token::OpenBracket => Token::OpenCurly,
-            Token::CloseBracket => Token::CloseCurly,
-            a => a,
-        }
+    let iter = iter.map(|t| match t {
+        Token::OpenBracket => Token::OpenCurly,
+        Token::CloseBracket => Token::CloseCurly,
+        a => a,
     });
 
     Sexp::parse_iter(iter)
 }
 
-fn sexp_to_graph<NodeWeightFn, EdgeWeightFn, N, E>(sexp: Sexp,
-                                                   node_weight_fn: &NodeWeightFn,
-                                                   edge_weight_fn: &EdgeWeightFn)
-                                                   -> Result<Graph<N, E, Directed>, &'static str>
-    where NodeWeightFn: Fn(Option<&Sexp>) -> Option<N>,
-          EdgeWeightFn: Fn(Option<&Sexp>) -> Option<E>
+fn sexp_to_graph<NodeWeightFn, EdgeWeightFn, N, E>(
+    sexp: Sexp,
+    node_weight_fn: &NodeWeightFn,
+    edge_weight_fn: &EdgeWeightFn,
+) -> Result<Graph<N, E, Directed>, &'static str>
+where
+    NodeWeightFn: Fn(Option<&Sexp>) -> Option<N>,
+    EdgeWeightFn: Fn(Option<&Sexp>) -> Option<E>,
 {
     let mut map = try!(sexp.into_map());
 
@@ -79,19 +81,19 @@ fn sexp_to_graph<NodeWeightFn, EdgeWeightFn, N, E>(sexp: Sexp,
                 Some("edge") => {
                     let edge_info = try!(v.into_map());
 
-                    let source = if let Some(&Sexp::Atom(Atom::UInt(source))) =
-                                        edge_info.get("source") {
-                        source
-                    } else {
-                        return Err("Invalid source id");
-                    };
+                    let source =
+                        if let Some(&Sexp::Atom(Atom::UInt(source))) = edge_info.get("source") {
+                            source
+                        } else {
+                            return Err("Invalid source id");
+                        };
 
-                    let target = if let Some(&Sexp::Atom(Atom::UInt(target))) =
-                                        edge_info.get("target") {
-                        target
-                    } else {
-                        return Err("Invalid target id");
-                    };
+                    let target =
+                        if let Some(&Sexp::Atom(Atom::UInt(target))) = edge_info.get("target") {
+                            target
+                        } else {
+                            return Err("Invalid target id");
+                        };
 
                     match edge_weight_fn(edge_info.get("weight")) {
                         Some(weight) => {
@@ -159,10 +161,14 @@ fn test_parse_gml() {
     assert!(g.is_ok());
     let g = g.unwrap();
     assert_eq!(true, g.is_directed());
-    assert_eq!(true,
-               g.find_edge(NodeIndex::new(0), NodeIndex::new(1)).is_some());
-    assert_eq!(true,
-               g.find_edge(NodeIndex::new(1), NodeIndex::new(0)).is_some());
+    assert_eq!(
+        true,
+        g.find_edge(NodeIndex::new(0), NodeIndex::new(1)).is_some()
+    );
+    assert_eq!(
+        true,
+        g.find_edge(NodeIndex::new(1), NodeIndex::new(0)).is_some()
+    );
     assert_eq!(Some(&1.0), g.node_weight(NodeIndex::new(0)));
     assert_eq!(Some(&0.0), g.node_weight(NodeIndex::new(1)));
 }
