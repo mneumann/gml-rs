@@ -1,6 +1,3 @@
-extern crate asexp;
-extern crate petgraph;
-
 use asexp::atom::Atom;
 use asexp::token::{Token, Tokenizer};
 use asexp::Sexp;

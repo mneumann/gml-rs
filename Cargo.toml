@@ -6,8 +6,8 @@ license = "MIT"
 repository = "https://github.com/mneumann/gml-rs"
 description = "GML (Graph Modelling Language) loader"
 keywords = ["graph", "io", "gml"]
-
 include = ["src/lib.rs", "Cargo.toml", "README.md", "LICENSE"]
+edition = "2018"
 
 [dependencies]
 
