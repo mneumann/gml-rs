@@ -43,7 +43,7 @@ where
     NodeWeightFn: Fn(Option<&Sexp>) -> Option<N>,
     EdgeWeightFn: Fn(Option<&Sexp>) -> Option<E>,
 {
-    let mut map = try!(sexp.into_map());
+    let mut map = sexp.into_map()?;
 
     if let Some(Sexp::Map(v)) = map.remove("graph") {
         let mut node_map: BTreeMap<u64, NodeIndex> = BTreeMap::new();
@@ -61,7 +61,7 @@ where
                     }
                 }
                 Some("node") => {
-                    let node_info = try!(v.into_map());
+                    let node_info = v.into_map()?;
                     if let Some(&Sexp::Atom(Atom::UInt(node_id))) = node_info.get("id") {
                         match node_weight_fn(node_info.get("weight")) {
                             Some(weight) => {
@@ -79,7 +79,7 @@ where
                     }
                 }
                 Some("edge") => {
-                    let edge_info = try!(v.into_map());
+                    let edge_info = v.into_map()?;
 
                     let source =
                         if let Some(&Sexp::Atom(Atom::UInt(source))) = edge_info.get("source") {
