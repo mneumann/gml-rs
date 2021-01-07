@@ -1,9 +1,9 @@
 extern crate asexp;
 extern crate petgraph;
 
-use asexp::Sexp;
 use asexp::atom::Atom;
 use asexp::token::{Token, Tokenizer};
+use asexp::Sexp;
 use petgraph::graph::NodeIndex;
 use petgraph::{Directed, Graph};
 use std::collections::BTreeMap;
@@ -52,14 +52,12 @@ where
 
         for (k, v) in v {
             match k.get_str() {
-                Some("directed") => {
-                    match v.get_uint() {
-                        Some(1) => {}
-                        _ => {
-                            return Err("only directed graph supported");
-                        }
+                Some("directed") => match v.get_uint() {
+                    Some(1) => {}
+                    _ => {
+                        return Err("only directed graph supported");
                     }
-                }
+                },
                 Some("node") => {
                     let node_info = v.into_map()?;
                     if let Some(&Sexp::Atom(Atom::UInt(node_id))) = node_info.get("id") {
@@ -155,9 +153,11 @@ fn test_parse_gml() {
     ]
     ";
 
-    let g = parse_gml(gml,
-                      &|s| -> Option<f64> { Some(s.and_then(Sexp::get_float).unwrap_or(0.0)) },
-                      &|_| -> Option<()> { Some(()) });
+    let g = parse_gml(
+        gml,
+        &|s| -> Option<f64> { Some(s.and_then(Sexp::get_float).unwrap_or(0.0)) },
+        &|_| -> Option<()> { Some(()) },
+    );
     assert!(g.is_ok());
     let g = g.unwrap();
     assert_eq!(true, g.is_directed());
