@@ -64,7 +64,7 @@ where
                         match node_weight_fn(node_info.get("weight")) {
                             Some(weight) => {
                                 let idx = graph.add_node(weight);
-                                if let Some(_) = node_map.insert(node_id, idx) {
+                                if node_map.insert(node_id, idx).is_some() {
                                     return Err("duplicate node-id");
                                 }
                             }
@@ -116,7 +116,7 @@ where
 
         Ok(graph)
     } else {
-        return Err("no graph given or invalid");
+        Err("no graph given or invalid")
     }
 }
 
