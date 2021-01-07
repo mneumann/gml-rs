@@ -12,4 +12,4 @@ include = ["src/lib.rs", "Cargo.toml", "README.md", "LICENSE"]
 [dependencies]
 
 asexp = "0.3"
-petgraph = "0.4"
+petgraph = "0.5"
