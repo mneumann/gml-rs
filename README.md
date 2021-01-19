@@ -1,4 +1,4 @@
-# gml-rs
+# graph-io-gml
 
 [GML][1] (Graph Modelling Language) loader for Rust.
 
